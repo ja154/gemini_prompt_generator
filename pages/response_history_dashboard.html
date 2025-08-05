@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Response History Dashboard - Gemini Prompt Generator</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fgeminipro6078back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.6"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Global Navigation Header -->
+    <header class="bg-surface border-b border-secondary-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2L26 8V24L16 30L6 24V8L16 2Z" fill="currentColor" opacity="0.1"/>
+                            <path d="M16 2L26 8V24L16 30L6 24V8L16 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="16" cy="16" r="6" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-lg font-semibold text-text-primary">Gemini Prompt Generator</h1>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="ai_prompt_interface.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        AI Interface
+                    </a>
+                    <a href="response_history_dashboard.html" class="text-primary font-medium px-3 py-2 rounded-md bg-primary-50">
+                        History
+                    </a>
+                    <a href="api_configuration_settings.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        Settings
+                    </a>
+                    <a href="system_status_monitor.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        Status
+                    </a>
+                </nav>
+
+                <!-- User Session Status -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden sm:flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-success rounded-full"></div>
+                        <span class="text-sm text-text-secondary">Connected</span>
+                    </div>
+                    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium">U</span>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="text-text-secondary hover:text-text-primary p-2" onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="md:hidden hidden border-t border-secondary-200 bg-surface">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="ai_prompt_interface.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    AI Interface
+                </a>
+                <a href="response_history_dashboard.html" class="block px-3 py-2 text-primary font-medium bg-primary-50 rounded-md">
+                    History
+                </a>
+                <a href="api_configuration_settings.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    Settings
+                </a>
+                <a href="system_status_monitor.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    Status
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-sm">
+                <li>
+                    <a href="ai_prompt_interface.html" class="text-text-secondary hover:text-text-primary transition-micro">Dashboard</a>
+                </li>
+                <li>
+                    <svg class="w-4 h-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </li>
+                <li>
+                    <span class="text-text-primary font-medium">History</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <!-- Page Header with Stats -->
+        <div class="mb-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-text-primary mb-2">Response History Dashboard</h1>
+                    <p class="text-text-secondary">Review, manage, and reuse your previous AI interactions efficiently.</p>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="flex items-center space-x-3 mt-4 lg:mt-0">
+                    <button onclick="exportHistory()" class="btn-secondary px-4 py-2 text-sm">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Export
+                    </button>
+                    <button onclick="clearHistory()" class="btn-secondary px-4 py-2 text-sm text-error-600 hover:bg-error-50">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="card p-4">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-primary-100 rounded-lg">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-2xl font-bold text-text-primary">247</p>
+                            <p class="text-sm text-text-secondary">Total Interactions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-accent-100 rounded-lg">
+                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-2xl font-bold text-text-primary">2.3s</p>
+                            <p class="text-sm text-text-secondary">Avg Response Time</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-success-100 rounded-lg">
+                            <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-2xl font-bold text-text-primary">18</p>
+                            <p class="text-sm text-text-secondary">This Week</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-warning-100 rounded-lg">
+                            <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-2xl font-bold text-text-primary">23</p>
+                            <p class="text-sm text-text-secondary">Favorites</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Filter Sidebar -->
+            <aside class="lg:w-1/4 order-2 lg:order-1">
+                <div class="card sticky top-24">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-text-primary">Filters</h3>
+                        <button onclick="resetFilters()" class="text-sm text-text-secondary hover:text-text-primary">
+                            Reset
+                        </button>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="mb-6">
+                        <label for="search-input" class="block text-sm font-medium text-text-primary mb-2">
+                            Search
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="search-input" class="input-field pl-10" placeholder="Search prompts and responses..." oninput="filterHistory()" />
+                            <svg class="absolute left-3 top-2.5 w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div class="mb-6">
+                        <button onclick="toggleFilterSection('date-filter')" class="flex items-center justify-between w-full text-left">
+                            <span class="text-sm font-medium text-text-primary">Date Range</span>
+                            <svg id="date-chevron" class="w-4 h-4 text-text-secondary transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="date-filter" class="mt-3 space-y-3">
+                            <div class="flex space-x-2">
+                                <input type="date" id="date-from" class="input-field text-sm" value="2025-07-01" />
+                                <input type="date" id="date-to" class="input-field text-sm" value="2025-08-05" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="date-preset" value="today" class="mr-2" />
+                                    <span class="text-sm text-text-secondary">Today</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="date-preset" value="week" class="mr-2" />
+                                    <span class="text-sm text-text-secondary">This Week</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="date-preset" value="month" class="mr-2" checked />
+                                    <span class="text-sm text-text-secondary">This Month</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="mb-6">
+                        <button onclick="toggleFilterSection('category-filter')" class="flex items-center justify-between w-full text-left">
+                            <span class="text-sm font-medium text-text-primary">Categories</span>
+                            <svg id="category-chevron" class="w-4 h-4 text-text-secondary transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="category-filter" class="mt-3 space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" checked />
+                                <span class="text-sm text-text-secondary">Code Generation</span>
+                                <span class="ml-auto text-xs text-text-secondary bg-secondary-100 px-2 py-1 rounded">42</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" checked />
+                                <span class="text-sm text-text-secondary">Content Writing</span>
+                                <span class="ml-auto text-xs text-text-secondary bg-secondary-100 px-2 py-1 rounded">38</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" checked />
+                                <span class="text-sm text-text-secondary">Explanations</span>
+                                <span class="ml-auto text-xs text-text-secondary bg-secondary-100 px-2 py-1 rounded">67</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" />
+                                <span class="text-sm text-text-secondary">Analysis</span>
+                                <span class="ml-auto text-xs text-text-secondary bg-secondary-100 px-2 py-1 rounded">23</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="mb-6">
+                        <button onclick="toggleFilterSection('rating-filter')" class="flex items-center justify-between w-full text-left">
+                            <span class="text-sm font-medium text-text-primary">Response Quality</span>
+                            <svg id="rating-chevron" class="w-4 h-4 text-text-secondary transform transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="rating-filter" class="hidden mt-3 space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" />
+                                <div class="flex items-center">
+                                    <span class="text-sm text-text-secondary mr-2">Excellent</span>
+                                    <div class="flex text-warning">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" />
+                                <span class="text-sm text-text-secondary">Good (4+ stars)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" />
+                                <span class="text-sm text-text-secondary">Average (3+ stars)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Filter Toggle -->
+                    <button onclick="toggleMobileFilters()" class="lg:hidden w-full btn-primary mb-4">
+                        Apply Filters
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="lg:w-3/4 order-1 lg:order-2">
+                <!-- Sorting and Bulk Actions -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                    <div class="flex items-center space-x-4 mb-4 sm:mb-0">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="select-all" class="mr-2" onchange="toggleSelectAll()" />
+                            <label for="select-all" class="text-sm text-text-secondary">Select All</label>
+                        </div>
+                        
+                        <div id="bulk-actions" class="hidden flex items-center space-x-2">
+                            <button onclick="bulkDelete()" class="btn-secondary text-sm text-error-600 hover:bg-error-50">
+                                Delete Selected
+                            </button>
+                            <button onclick="bulkExport()" class="btn-secondary text-sm">
+                                Export Selected
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <label for="sort-by" class="text-sm text-text-secondary">Sort by:</label>
+                        <select id="sort-by" class="input-field text-sm w-auto" onchange="sortHistory()">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="prompt-length">Prompt Length</option>
+                            <option value="response-quality">Response Quality</option>
+                            <option value="usage-frequency">Usage Frequency</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- History Cards -->
+                <div id="history-container" class="space-y-4">
+                    <!-- History Card 1 -->
+                    <div class="card history-card" data-category="explanations" data-date="2025-08-05">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-start space-x-3 flex-1">
+                                <input type="checkbox" class="mt-1 history-checkbox" onchange="updateBulkActions()" />
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent-100 text-accent-600">
+                                            Explanations
+                                        </span>
+                                        <span class="text-xs text-text-secondary">Aug 5, 2025 • 2:30 PM</span>
+                                    </div>
+                                    <h4 class="font-medium text-text-primary mb-2">Quantum Computing Explanation</h4>
+                                    <p class="text-sm text-text-secondary mb-3 line-clamp-2">
+                                        Explain quantum computing in simple terms for someone with a basic understanding of traditional computing...
+                                    </p>
+                                    <div class="flex items-center space-x-4 text-xs text-text-secondary">
+                                        <span>Prompt: 89 chars</span>
+                                        <span>Response: 1,247 chars</span>
+                                        <span>Response time: 2.1s</span>
+                                        <div class="flex items-center">
+                                            <span class="mr-1">Quality:</span>
+                                            <div class="flex text-warning">
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 ml-4">
+                                <button onclick="toggleFavorite(this)" class="p-2 text-text-secondary hover:text-warning transition-micro" title="Add to favorites">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="expandCard(this)" class="p-2 text-text-secondary hover:text-text-primary transition-micro" title="View full response">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="flex items-center justify-between pt-4 border-t border-secondary-200">
+                            <div class="flex items-center space-x-3">
+                                <button onclick="reusePrompt('Explain quantum computing in simple terms for someone with a basic understanding of traditional computing')" class="btn-secondary text-sm px-3 py-1">
+                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                    Reuse Prompt
+                                </button>
+                                <button onclick="copyToClipboard('quantum-response')" class="btn-secondary text-sm px-3 py-1">
+                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    Copy Response
+                                </button>
+                            </div>
+                            <button onclick="deleteHistoryItem(this)" class="text-error-600 hover:text-error-700 text-sm">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+
+                        <!-- Expandable Content -->
+                        <div class="hidden mt-4 pt-4 border-t border-secondary-200 expanded-content">
+                            <div class="space-y-4">
+                                <div>
+                                    <h5 class="font-medium text-text-primary mb-2">Full Prompt:</h5>
+                                    <div class="bg-secondary-50 p-3 rounded-lg text-sm text-text-primary">
+                                        Explain quantum computing in simple terms for someone with a basic understanding of traditional computing. Include key concepts like qubits, superposition, and entanglement.
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-text-primary mb-2">AI Response:</h5>
+                                    <div id="quantum-response" class="bg-secondary-50 p-3 rounded-lg text-sm text-text-primary">
+                                        <p class="mb-3">Quantum computing represents a fundamental shift from traditional computing, leveraging quantum mechanical phenomena to process information in ways that classical computers cannot.</p>
+                                        <p class="mb-3"><strong>Key Differences:</strong></p>
+                                        <ul class="list-disc list-inside space-y-1 mb-3">
+                                            <li><strong>Qubits vs Bits:</strong> While classical computers use bits (0 or 1), quantum computers use qubits that can exist in superposition - simultaneously 0 and 1.</li>
+                                            <li><strong>Superposition:</strong> This allows quantum computers to explore multiple solutions simultaneously, exponentially increasing computational power.</li>
+                                            <li><strong>Entanglement:</strong> Qubits can be entangled, meaning the state of one instantly affects another, regardless of distance.</li>
+                                        </ul>
+                                        <p>These properties enable quantum computers to solve certain problems exponentially faster than classical computers, particularly in cryptography, optimization, and simulation tasks.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Card 2 -->
+                    <div class="card history-card" data-category="code-generation" data-date="2025-08-04">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-start space-x-3 flex-1">
+                                <input type="checkbox" class="mt-1 history-checkbox" onchange="updateBulkActions()" />
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-600">
+                                            Code Generation
+                                        </span>
+                                        <span class="text-xs text-text-secondary">Aug 4, 2025 • 4:15 PM</span>
+                                    </div>
+                                    <h4 class="font-medium text-text-primary mb-2">Python Sorting Function</h4>
+                                    <p class="text-sm text-text-secondary mb-3 line-clamp-2">
+                                        Write a Python function to sort a list of dictionaries by multiple keys with custom sorting logic...
+                                    </p>
+                                    <div class="flex items-center space-x-4 text-xs text-text-secondary">
+                                        <span>Prompt: 156 chars</span>
+                                        <span>Response: 892 chars</span>
+                                        <span>Response time: 1.8s</span>
+                                        <div class="flex items-center">
+                                            <span class="mr-1">Quality:</span>
+                                            <div class="flex text-warning">
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3 text-secondary-300" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 ml-4">
+                                <button onclick="toggleFavorite(this)" class="p-2 text-warning hover:text-warning-600 transition-micro" title="Remove from favorites">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="expandCard(this)" class="p-2 text-text-secondary hover:text-text-primary transition-micro" title="View full response">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="flex items-center justify-between pt-4 border-t border-secondary-200">
+                            <div class="flex items-center space-x-3">
+                                <button onclick="reusePrompt('Write a Python function to sort a list of dictionaries by multiple keys with custom sorting logic')" class="btn-secondary text-sm px-3 py-1">
+                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                    Reuse Prompt
+                                </button>
+                                <button onclick="copyToClipboard('python-response')" class="btn-secondary text-sm px-3 py-1">
+                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    Copy Response
+                                </button>
+                            </div>
+                            <button onclick="deleteHistoryItem(this)" class="text-error-600 hover:text-error-700 text-sm">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- History Card 3 -->
+                    <div class="card history-card" data-category="content-writing" data-date="2025-08-03">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-start space-x-3 flex-1">
+                                <input type="checkbox" class="mt-1 history-checkbox" onchange="updateBulkActions()" />
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-600">
+                                            Content Writing
+                                        </span>
+                                        <span class="text-xs text-text-secondary">Aug 3, 2025 • 10:22 AM</span>
+                                    </div>
+                                    <h4 class="font-medium text-text-primary mb-2">Marketing Strategy for Tech Startup</h4>
+                                    <p class="text-sm text-text-secondary mb-3 line-clamp-2">
+                                        Create a comprehensive marketing strategy for a tech startup focusing on AI-powered productivity tools...
+                                    </p>
+                                    <div class="flex items-center space-x-4 text-xs text-text-secondary">
+                                        <span>Prompt: 234 chars</span>
+                                        <span>Response: 2,156 chars</span>
+                                        <span>Response time: 3.2s</span>
+                                        <div class="flex items-center">
+                                            <span class="mr-1">Quality:</span>
+                                            <div class="flex text-warning">
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3 text-secondary-300" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <svg class="w-3 h-3 text-secondary-300" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 ml-4">
+                                <button onclick="toggleFavorite(this)" class="p-2 text-text-secondary hover:text-warning transition-micro" title="Add to favorites">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="expandCard(this)" class="p-2 text-text-secondary hover:text-text-primary transition-micro" title="View full response">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="flex items-center justify-between pt-4 border-t border-secondary-200">
+                            <div class="flex items-center space-x-3">
+                                <button onclick="reusePrompt('Create a comprehensive marketing strategy for a tech startup focusing on AI-powered productivity tools')" class="btn-secondary text-sm px-3 py-1">
+                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                    Reuse Prompt
+                                </button>
+                                <button onclick="copyToClipboard('marketing-response')" class="btn-secondary text-sm px-3 py-1">
+                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    Copy Response
+                                </button>
+                            </div>
+                            <button onclick="deleteHistoryItem(this)" class="text-error-600 hover:text-error-700 text-sm">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between mt-8 pt-6 border-t border-secondary-200">
+                    <div class="flex items-center text-sm text-text-secondary">
+                        <span>Showing 1-10 of 247 interactions</span>
+                        <select class="ml-4 input-field text-sm w-auto">
+                            <option value="10">10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <button class="btn-secondary px-3 py-2 text-sm" disabled>
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            Previous
+                        </button>
+                        
+                        <div class="flex items-center space-x-1">
+                            <button class="px-3 py-2 text-sm bg-primary text-white rounded-md">1</button>
+                            <button class="px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">2</button>
+                            <button class="px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">3</button>
+                            <span class="px-2 text-text-secondary">...</span>
+                            <button class="px-3 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">25</button>
+                        </div>
+                        
+                        <button class="btn-secondary px-3 py-2 text-sm">
+                            Next
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Filter Button -->
+        <button onclick="toggleMobileFilters()" class="lg:hidden fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary-700 transition-micro">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"/>
+            </svg>
+        </button>
+    </main>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toggle filter sections
+        function toggleFilterSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const chevron = document.getElementById(sectionId.replace('-filter', '-chevron'));
+            
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                section.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        // Toggle mobile filters
+        function toggleMobileFilters() {
+            const sidebar = document.querySelector('aside');
+            sidebar.classList.toggle('hidden');
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('date-from').value = '2025-07-01';
+            document.getElementById('date-to').value = '2025-08-05';
+            
+            // Reset checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.classList.contains('history-checkbox') || checkbox.id === 'select-all') {
+                    checkbox.checked = false;
+                } else {
+                    checkbox.checked = true;
+                }
+            });
+            
+            // Reset radio buttons
+            document.querySelector('input[name="date-preset"][value="month"]').checked = true;
+            
+            filterHistory();
+        }
+
+        // Filter history
+        function filterHistory() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.history-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h4').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Sort history
+        function sortHistory() {
+            const sortBy = document.getElementById('sort-by').value;
+            const container = document.getElementById('history-container');
+            const cards = Array.from(container.querySelectorAll('.history-card'));
+            
+            cards.sort((a, b) => {
+                switch (sortBy) {
+                    case 'date-desc':
+                        return new Date(b.dataset.date) - new Date(a.dataset.date);
+                    case 'date-asc':
+                        return new Date(a.dataset.date) - new Date(b.dataset.date);
+                    case 'prompt-length':
+                        const aLength = parseInt(a.querySelector('.text-xs').textContent.match(/\d+/)[0]);
+                        const bLength = parseInt(b.querySelector('.text-xs').textContent.match(/\d+/)[0]);
+                        return bLength - aLength;
+                    default:
+                        return 0;
+                }
+            });
+            
+            cards.forEach(card => container.appendChild(card));
+        }
+
+        // Toggle select all
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('select-all');
+            const checkboxes = document.querySelectorAll('.history-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            
+            updateBulkActions();
+        }
+
+        // Update bulk actions visibility
+        function updateBulkActions() {
+            const checkboxes = document.querySelectorAll('.history-checkbox:checked');
+            const bulkActions = document.getElementById('bulk-actions');
+            
+            if (checkboxes.length > 0) {
+                bulkActions.classList.remove('hidden');
+            } else {
+                bulkActions.classList.add('hidden');
+            }
+        }
+
+        // Toggle favorite
+        function toggleFavorite(button) {
+            const svg = button.querySelector('svg');
+            const isCurrentlyFavorited = svg.getAttribute('fill') === 'currentColor';
+            
+            if (isCurrentlyFavorited) {
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                button.classList.remove('text-warning');
+                button.classList.add('text-text-secondary');
+                button.title = 'Add to favorites';
+            } else {
+                svg.setAttribute('fill', 'currentColor');
+                svg.removeAttribute('stroke');
+                button.classList.remove('text-text-secondary');
+                button.classList.add('text-warning');
+                button.title = 'Remove from favorites';
+            }
+        }
+
+        // Expand card
+        function expandCard(button) {
+            const card = button.closest('.history-card');
+            const expandedContent = card.querySelector('.expanded-content');
+            const svg = button.querySelector('svg');
+            
+            if (expandedContent.classList.contains('hidden')) {
+                expandedContent.classList.remove('hidden');
+                svg.style.transform = 'rotate(180deg)';
+            } else {
+                expandedContent.classList.add('hidden');
+                svg.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Reuse prompt
+        function reusePrompt(promptText) {
+            // Navigate to AI interface with prompt
+            const encodedPrompt = encodeURIComponent(promptText);
+            window.location.href = `ai_prompt_interface.html?prompt=${encodedPrompt}`;
+        }
+
+        // Copy to clipboard
+        async function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element ? element.innerText : 'Content not found';
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                // Show success feedback
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = `
+                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Copied!
+                `;
+                button.classList.add('bg-success-100', 'text-success-600');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('bg-success-100', 'text-success-600');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        }
+
+        // Delete history item
+        function deleteHistoryItem(button) {
+            if (confirm('Are you sure you want to delete this history item?')) {
+                const card = button.closest('.history-card');
+                card.remove();
+            }
+        }
+
+        // Bulk delete
+        function bulkDelete() {
+            const selectedCards = document.querySelectorAll('.history-checkbox:checked');
+            if (selectedCards.length === 0) return;
+            
+            if (confirm(`Are you sure you want to delete ${selectedCards.length} selected items?`)) {
+                selectedCards.forEach(checkbox => {
+                    checkbox.closest('.history-card').remove();
+                });
+                updateBulkActions();
+            }
+        }
+
+        // Bulk export
+        function bulkExport() {
+            const selectedCards = document.querySelectorAll('.history-checkbox:checked');
+            if (selectedCards.length === 0) return;
+            
+            alert(`Exporting ${selectedCards.length} selected items...`);
+        }
+
+        // Export history
+        function exportHistory() {
+            alert('Exporting all history data...');
+        }
+
+        // Clear history
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all history? This action cannot be undone.')) {
+                document.getElementById('history-container').innerHTML = '<div class="text-center py-12"><p class="text-text-secondary">No history items found.</p></div>';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up initial filter states
+            filterHistory();
+        });
+    </script>
+</body>
+</html>

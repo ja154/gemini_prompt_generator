@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Configuration Settings - Gemini Prompt Generator</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fgeminipro6078back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.6"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Global Navigation Header -->
+    <header class="bg-surface border-b border-secondary-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2L26 8V24L16 30L6 24V8L16 2Z" fill="currentColor" opacity="0.1"/>
+                            <path d="M16 2L26 8V24L16 30L6 24V8L16 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="16" cy="16" r="6" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-lg font-semibold text-text-primary">Gemini Prompt Generator</h1>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="ai_prompt_interface.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        AI Interface
+                    </a>
+                    <a href="response_history_dashboard.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        History
+                    </a>
+                    <a href="api_configuration_settings.html" class="text-primary font-medium px-3 py-2 rounded-md bg-primary-50">
+                        Settings
+                    </a>
+                    <a href="system_status_monitor.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        Status
+                    </a>
+                </nav>
+
+                <!-- User Session Status -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden sm:flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-success rounded-full"></div>
+                        <span class="text-sm text-text-secondary">Connected</span>
+                    </div>
+                    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium">A</span>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="text-text-secondary hover:text-text-primary p-2" onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="md:hidden hidden border-t border-secondary-200 bg-surface">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="ai_prompt_interface.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    AI Interface
+                </a>
+                <a href="response_history_dashboard.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    History
+                </a>
+                <a href="api_configuration_settings.html" class="block px-3 py-2 text-primary font-medium bg-primary-50 rounded-md">
+                    Settings
+                </a>
+                <a href="system_status_monitor.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    Status
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Configuration Sidebar -->
+            <aside class="lg:w-80">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">Configuration</h3>
+                    
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden lg:block space-y-2">
+                        <button onclick="showTab('api-settings')" id="tab-api-settings" class="w-full text-left px-3 py-2 rounded-md text-primary bg-primary-50 font-medium transition-micro">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            API Settings
+                        </button>
+                        <button onclick="showTab('security')" id="tab-security" class="w-full text-left px-3 py-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-secondary-100 transition-micro">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            Security
+                        </button>
+                        <button onclick="showTab('rate-limiting')" id="tab-rate-limiting" class="w-full text-left px-3 py-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-secondary-100 transition-micro">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Rate Limiting
+                        </button>
+                        <button onclick="showTab('logging')" id="tab-logging" class="w-full text-left px-3 py-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-secondary-100 transition-micro">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Logging
+                        </button>
+                        <button onclick="showTab('user-management')" id="tab-user-management" class="w-full text-left px-3 py-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-secondary-100 transition-micro">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                            </svg>
+                            User Management
+                        </button>
+                    </nav>
+
+                    <!-- Mobile Accordion -->
+                    <div class="lg:hidden space-y-2">
+                        <div class="border border-secondary-200 rounded-md">
+                            <button onclick="toggleAccordion('mobile-api-settings')" class="w-full text-left px-3 py-2 flex items-center justify-between text-text-primary font-medium">
+                                <span>API Settings</span>
+                                <svg id="chevron-mobile-api-settings" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                            <div id="mobile-api-settings" class="hidden px-3 pb-2">
+                                <p class="text-sm text-text-secondary">Configure API endpoints and connection settings</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup/Restore Section -->
+                    <div class="mt-6 pt-6 border-t border-secondary-200">
+                        <h4 class="text-sm font-medium text-text-primary mb-3">Configuration Management</h4>
+                        <div class="space-y-2">
+                            <button onclick="exportConfig()" class="w-full btn-secondary text-sm">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Export Config
+                            </button>
+                            <button onclick="importConfig()" class="w-full btn-secondary text-sm">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                                </svg>
+                                Import Config
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Configuration Content -->
+            <div class="flex-1">
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-text-primary mb-2">API Configuration Settings</h1>
+                    <p class="text-text-secondary">Manage system parameters, security settings, and integration options for your Gemini API proxy service.</p>
+                </div>
+
+                <!-- API Settings Tab -->
+                <div id="content-api-settings" class="tab-content">
+                    <div class="space-y-6">
+                        <!-- Endpoint Configuration -->
+                        <div class="card">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-text-primary">Endpoint Configuration</h3>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-success rounded-full"></div>
+                                    <span class="text-sm text-success-600">Connected</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="api-endpoint" class="block text-sm font-medium text-text-primary mb-2">
+                                        API Endpoint URL
+                                    </label>
+                                    <input type="url" id="api-endpoint" class="input-field" value="https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent" placeholder="Enter API endpoint URL" />
+                                    <p class="text-xs text-text-secondary mt-1">Primary endpoint for Gemini API requests</p>
+                                </div>
+                                <div>
+                                    <label for="api-key" class="block text-sm font-medium text-text-primary mb-2">
+                                        API Key
+                                    </label>
+                                    <div class="relative">
+                                        <input type="password" id="api-key" class="input-field pr-10" value="AIzaSyC8UYZpvA2eRhSHiuJvJ0FvLuClcHjsWkM" placeholder="Enter your API key" />
+                                        <button type="button" onclick="togglePasswordVisibility('api-key')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-text-secondary hover:text-text-primary">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-text-secondary mt-1">Your Google Cloud API key</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 flex items-center space-x-3">
+                                <button onclick="testConnection()" class="btn-secondary">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                    Test Connection
+                                </button>
+                                <div id="connection-status" class="hidden flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                                    <span class="text-sm text-success-600">Testing connection...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeout & Retry Settings -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Timeout & Retry Configuration</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="request-timeout" class="block text-sm font-medium text-text-primary mb-2">
+                                        Request Timeout (seconds)
+                                    </label>
+                                    <input type="number" id="request-timeout" class="input-field" value="30" min="5" max="300" />
+                                    <p class="text-xs text-text-secondary mt-1">Maximum time to wait for API response</p>
+                                </div>
+                                <div>
+                                    <label for="retry-attempts" class="block text-sm font-medium text-text-primary mb-2">
+                                        Retry Attempts
+                                    </label>
+                                    <input type="number" id="retry-attempts" class="input-field" value="3" min="0" max="10" />
+                                    <p class="text-xs text-text-secondary mt-1">Number of retry attempts on failure</p>
+                                </div>
+                                <div>
+                                    <label for="retry-delay" class="block text-sm font-medium text-text-primary mb-2">
+                                        Retry Delay (seconds)
+                                    </label>
+                                    <input type="number" id="retry-delay" class="input-field" value="2" min="1" max="60" />
+                                    <p class="text-xs text-text-secondary mt-1">Delay between retry attempts</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Tab -->
+                <div id="content-security" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <!-- CORS Configuration -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">CORS Configuration</h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="allowed-origins" class="block text-sm font-medium text-text-primary mb-2">
+                                        Allowed Origins
+                                    </label>
+                                    <textarea id="allowed-origins" rows="3" class="input-field" placeholder="https://example.com&#10;https://app.example.com&#10;http://localhost:3000">https://localhost:3000
+https://gemini-prompt-generator.vercel.app
+https://api.gemini-proxy.com</textarea>
+                                    <p class="text-xs text-text-secondary mt-1">One origin per line. Use * for all origins (not recommended for production)</p>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                            <span class="ml-2 text-sm text-text-primary">Allow Credentials</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                            <span class="ml-2 text-sm text-text-primary">Preflight Caching</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SSL Certificate Status -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">SSL Certificate Status</h3>
+                            
+                            <div class="bg-success-50 border border-success-200 rounded-lg p-4">
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 text-success-500 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-medium text-success-800 mb-1">Certificate Valid</h4>
+                                        <p class="text-sm text-success-600 mb-2">SSL certificate is valid and properly configured</p>
+                                        <div class="text-xs text-success-600 space-y-1">
+                                            <p><strong>Issuer:</strong> Let's Encrypt Authority X3</p>
+                                            <p><strong>Valid Until:</strong> March 15, 2025</p>
+                                            <p><strong>Domain:</strong> api.gemini-proxy.com</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Security Policy -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Content Security Policy</h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="csp-policy" class="block text-sm font-medium text-text-primary mb-2">
+                                        CSP Directives
+                                    </label>
+                                    <textarea id="csp-policy" rows="4" class="input-field font-mono text-sm" placeholder="default-src 'self'; script-src 'self' 'unsafe-inline';">default-src 'self';
+script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src 'self' https://fonts.gstatic.com;
+img-src 'self' data: https:;</textarea>
+                                    <p class="text-xs text-text-secondary mt-1">Define content security policy directives</p>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                        <span class="ml-2 text-sm text-text-primary">Report Only Mode</span>
+                                    </label>
+                                    <button onclick="validateCSP()" class="btn-secondary text-sm">
+                                        Validate Policy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rate Limiting Tab -->
+                <div id="content-rate-limiting" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <!-- Current Usage Metrics -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Current Usage Metrics</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="text-center">
+                                    <div class="relative w-24 h-24 mx-auto mb-3">
+                                        <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" stroke="#e2e8f0" stroke-width="8" fill="none"/>
+                                            <circle cx="50" cy="50" r="40" stroke="#3b82f6" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="175.84" stroke-linecap="round"/>
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <span class="text-lg font-semibold text-text-primary">30%</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm font-medium text-text-primary">Hourly Limit</p>
+                                    <p class="text-xs text-text-secondary">150 / 500 requests</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="relative w-24 h-24 mx-auto mb-3">
+                                        <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" stroke="#e2e8f0" stroke-width="8" fill="none"/>
+                                            <circle cx="50" cy="50" r="40" stroke="#059669" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="125.6" stroke-linecap="round"/>
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <span class="text-lg font-semibold text-text-primary">50%</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm font-medium text-text-primary">Daily Limit</p>
+                                    <p class="text-xs text-text-secondary">2.5K / 5K requests</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="relative w-24 h-24 mx-auto mb-3">
+                                        <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" stroke="#e2e8f0" stroke-width="8" fill="none"/>
+                                            <circle cx="50" cy="50" r="40" stroke="#d97706" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-linecap="round"/>
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <span class="text-lg font-semibold text-text-primary">75%</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm font-medium text-text-primary">Monthly Limit</p>
+                                    <p class="text-xs text-text-secondary">75K / 100K requests</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rate Limit Configuration -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Rate Limit Configuration</h3>
+                            
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="requests-per-minute" class="block text-sm font-medium text-text-primary mb-2">
+                                            Requests per Minute
+                                        </label>
+                                        <input type="number" id="requests-per-minute" class="input-field" value="10" min="1" max="1000" />
+                                        <p class="text-xs text-text-secondary mt-1">Maximum requests per minute per user</p>
+                                    </div>
+                                    <div>
+                                        <label for="requests-per-hour" class="block text-sm font-medium text-text-primary mb-2">
+                                            Requests per Hour
+                                        </label>
+                                        <input type="number" id="requests-per-hour" class="input-field" value="500" min="1" max="10000" />
+                                        <p class="text-xs text-text-secondary mt-1">Maximum requests per hour per user</p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-warning-50 border border-warning-200 rounded-lg p-4">
+                                    <div class="flex items-start">
+                                        <svg class="w-5 h-5 text-warning-500 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                                        </svg>
+                                        <div>
+                                            <h4 class="text-sm font-medium text-warning-800 mb-1">Rate Limit Warning</h4>
+                                            <p class="text-sm text-warning-600">Changing rate limits will affect all users immediately. Consider the impact on current sessions.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User-Specific Limits -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">User-Specific Limits</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-3 bg-secondary-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                            <span class="text-white text-sm font-medium">A</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-text-primary">admin@example.com</p>
+                                            <p class="text-xs text-text-secondary">Administrator</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-text-primary">Unlimited</p>
+                                        <p class="text-xs text-text-secondary">No rate limits</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-secondary-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                                            <span class="text-white text-sm font-medium">U</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-text-primary">user@example.com</p>
+                                            <p class="text-xs text-text-secondary">Standard User</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-text-primary">10/min, 500/hr</p>
+                                        <p class="text-xs text-text-secondary">Standard limits</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logging Tab -->
+                <div id="content-logging" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <!-- Log Configuration -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Log Configuration</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="log-level" class="block text-sm font-medium text-text-primary mb-2">
+                                        Log Level
+                                    </label>
+                                    <select id="log-level" class="input-field">
+                                        <option value="error">Error</option>
+                                        <option value="warn">Warning</option>
+                                        <option value="info" selected>Info</option>
+                                        <option value="debug">Debug</option>
+                                    </select>
+                                    <p class="text-xs text-text-secondary mt-1">Minimum log level to record</p>
+                                </div>
+                                <div>
+                                    <label for="log-retention" class="block text-sm font-medium text-text-primary mb-2">
+                                        Retention Period (days)
+                                    </label>
+                                    <input type="number" id="log-retention" class="input-field" value="30" min="1" max="365" />
+                                    <p class="text-xs text-text-secondary mt-1">How long to keep log files</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 space-y-3">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                    <span class="ml-2 text-sm text-text-primary">Log API Requests</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                    <span class="ml-2 text-sm text-text-primary">Log API Responses</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" />
+                                    <span class="ml-2 text-sm text-text-primary">Log User Actions</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                    <span class="ml-2 text-sm text-text-primary">Log Errors Only</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Activity Monitor -->
+                        <div class="card">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-text-primary">Real-time Activity</h3>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                                    <span class="text-sm text-success-600">Live</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3 max-h-64 overflow-y-auto">
+                                <div class="flex items-start space-x-3 p-3 bg-secondary-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-success rounded-full mt-2"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-text-primary">
+                                            <span class="font-medium">API Request</span> - POST /api/generate
+                                        </p>
+                                        <p class="text-xs text-text-secondary">user@example.com • 2 seconds ago</p>
+                                    </div>
+                                    <span class="text-xs text-success-600 font-medium">200</span>
+                                </div>
+                                <div class="flex items-start space-x-3 p-3 bg-secondary-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-text-primary">
+                                            <span class="font-medium">Rate Limit Warning</span> - User approaching limit
+                                        </p>
+                                        <p class="text-xs text-text-secondary">admin@example.com • 1 minute ago</p>
+                                    </div>
+                                    <span class="text-xs text-warning-600 font-medium">429</span>
+                                </div>
+                                <div class="flex items-start space-x-3 p-3 bg-secondary-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-success rounded-full mt-2"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-text-primary">
+                                            <span class="font-medium">Configuration Update</span> - API timeout changed
+                                        </p>
+                                        <p class="text-xs text-text-secondary">admin@example.com • 5 minutes ago</p>
+                                    </div>
+                                    <span class="text-xs text-text-secondary font-medium">INFO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Reports -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Download Reports</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <button onclick="downloadReport('access')" class="btn-secondary justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Access Logs
+                                </button>
+                                <button onclick="downloadReport('error')" class="btn-secondary justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Error Logs
+                                </button>
+                                <button onclick="downloadReport('audit')" class="btn-secondary justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Audit Trail
+                                </button>
+                                <button onclick="downloadReport('performance')" class="btn-secondary justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Performance
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Management Tab -->
+                <div id="content-user-management" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <!-- User List -->
+                        <div class="card">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-text-primary">User Management</h3>
+                                <button onclick="addUser()" class="btn-primary">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                    </svg>
+                                    Add User
+                                </button>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-secondary-200">
+                                            <th class="text-left py-3 px-4 text-sm font-medium text-text-primary">User</th>
+                                            <th class="text-left py-3 px-4 text-sm font-medium text-text-primary">Role</th>
+                                            <th class="text-left py-3 px-4 text-sm font-medium text-text-primary">Status</th>
+                                            <th class="text-left py-3 px-4 text-sm font-medium text-text-primary">Last Active</th>
+                                            <th class="text-left py-3 px-4 text-sm font-medium text-text-primary">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-secondary-200">
+                                        <tr>
+                                            <td class="py-3 px-4">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                                        <span class="text-white text-sm font-medium">A</span>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-medium text-text-primary">admin@example.com</p>
+                                                        <p class="text-xs text-text-secondary">Administrator</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-600">
+                                                    Admin
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-600">
+                                                    Active
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2 minutes ago</td>
+                                            <td class="py-3 px-4">
+                                                <div class="flex items-center space-x-2">
+                                                    <button onclick="editUser('admin@example.com')" class="text-text-secondary hover:text-text-primary">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                        </svg>
+                                                    </button>
+                                                    <button onclick="deleteUser('admin@example.com')" class="text-error-500 hover:text-error-600">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                                                        <span class="text-white text-sm font-medium">U</span>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-medium text-text-primary">user@example.com</p>
+                                                        <p class="text-xs text-text-secondary">Standard User</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-100 text-secondary-600">
+                                                    User
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-600">
+                                                    Active
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">1 hour ago</td>
+                                            <td class="py-3 px-4">
+                                                <div class="flex items-center space-x-2">
+                                                    <button onclick="editUser('user@example.com')" class="text-text-secondary hover:text-text-primary">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                        </svg>
+                                                    </button>
+                                                    <button onclick="deleteUser('user@example.com')" class="text-error-500 hover:text-error-600">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Role Permissions -->
+                        <div class="card">
+                            <h3 class="text-lg font-semibold text-text-primary mb-4">Role Permissions</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="border border-secondary-200 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="text-sm font-medium text-text-primary">Administrator</h4>
+                                        <span class="text-xs text-text-secondary">Full Access</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked disabled />
+                                            <span class="ml-2 text-xs text-text-secondary">API Access</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked disabled />
+                                            <span class="ml-2 text-xs text-text-secondary">Settings</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked disabled />
+                                            <span class="ml-2 text-xs text-text-secondary">User Mgmt</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked disabled />
+                                            <span class="ml-2 text-xs text-text-secondary">Logs</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="border border-secondary-200 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="text-sm font-medium text-text-primary">Standard User</h4>
+                                        <span class="text-xs text-text-secondary">Limited Access</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" checked />
+                                            <span class="ml-2 text-xs text-text-secondary">API Access</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" />
+                                            <span class="ml-2 text-xs text-text-secondary">Settings</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" />
+                                            <span class="ml-2 text-xs text-text-secondary">User Mgmt</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-secondary-300 text-primary focus:ring-primary" />
+                                            <span class="ml-2 text-xs text-text-secondary">Logs</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sticky Save/Cancel Actions -->
+                <div class="sticky bottom-0 bg-surface border-t border-secondary-200 p-6 mt-8 -mx-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div id="changes-indicator" class="hidden w-2 h-2 bg-warning rounded-full"></div>
+                            <span id="changes-text" class="text-sm text-text-secondary">No unsaved changes</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="resetChanges()" class="btn-secondary">
+                                Cancel
+                            </button>
+                            <button onclick="saveChanges()" class="btn-primary">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-surface rounded-lg shadow-lg max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-warning-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3 w-0 flex-1">
+                        <h3 class="text-lg font-medium text-text-primary mb-2">Confirm Changes</h3>
+                        <p id="confirmation-message" class="text-sm text-text-secondary mb-4">
+                            Are you sure you want to save these configuration changes? This will affect all users immediately.
+                        </p>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="closeConfirmationModal()" class="btn-secondary">
+                                Cancel
+                            </button>
+                            <button onclick="confirmSave()" class="btn-primary">
+                                Confirm Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Management
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.add('hidden'));
+            
+            // Remove active state from all tab buttons
+            const tabButtons = document.querySelectorAll('[id^="tab-"]');
+            tabButtons.forEach(button => {
+                button.classList.remove('text-primary', 'bg-primary-50', 'font-medium');
+                button.classList.add('text-text-secondary', 'hover:text-text-primary', 'hover:bg-secondary-100');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            
+            // Add active state to selected tab button
+            const activeButton = document.getElementById(`tab-${tabName}`);
+            activeButton.classList.remove('text-text-secondary', 'hover:text-text-primary', 'hover:bg-secondary-100');
+            activeButton.classList.add('text-primary', 'bg-primary-50', 'font-medium');
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Mobile Accordion Toggle
+        function toggleAccordion(accordionId) {
+            const accordion = document.getElementById(accordionId);
+            const chevron = document.getElementById(`chevron-${accordionId}`);
+            
+            accordion.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-90');
+        }
+
+        // Password Visibility Toggle
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+        }
+
+        // Test Connection
+        async function testConnection() {
+            const statusDiv = document.getElementById('connection-status');
+            statusDiv.classList.remove('hidden');
+            
+            // Simulate API test
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            statusDiv.innerHTML = `
+                <div class="w-2 h-2 bg-success rounded-full"></div>
+                <span class="text-sm text-success-600">Connection successful!</span>
+            `;
+            
+            setTimeout(() => {
+                statusDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Validate CSP
+        function validateCSP() {
+            alert('CSP policy validation would be implemented here');
+        }
+
+        // Download Report
+        function downloadReport(reportType) {
+            // Simulate download
+            const link = document.createElement('a');
+            link.href = '#';
+            link.download = `${reportType}-report-${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // User Management
+        function addUser() {
+            alert('Add user modal would open here');
+        }
+
+        function editUser(email) {
+            alert(`Edit user: ${email}`);
+        }
+
+        function deleteUser(email) {
+            if (confirm(`Are you sure you want to delete user: ${email}?`)) {
+                alert(`User ${email} would be deleted`);
+            }
+        }
+
+        // Configuration Management
+        function exportConfig() {
+            const config = {
+                apiEndpoint: document.getElementById('api-endpoint').value,
+                requestTimeout: document.getElementById('request-timeout').value,
+                retryAttempts: document.getElementById('retry-attempts').value,
+                // ... other config values
+            };
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `gemini-config-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importConfig() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const config = JSON.parse(e.target.result);
+                            // Apply configuration
+                            if (config.apiEndpoint) document.getElementById('api-endpoint').value = config.apiEndpoint;
+                            if (config.requestTimeout) document.getElementById('request-timeout').value = config.requestTimeout;
+                            // ... apply other config values
+                            
+                            showChangesIndicator();
+                            alert('Configuration imported successfully!');
+                        } catch (error) {
+                            alert('Invalid configuration file');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Changes Management
+        function showChangesIndicator() {
+            document.getElementById('changes-indicator').classList.remove('hidden');
+            document.getElementById('changes-text').textContent = 'You have unsaved changes';
+        }
+
+        function hideChangesIndicator() {
+            document.getElementById('changes-indicator').classList.add('hidden');
+            document.getElementById('changes-text').textContent = 'No unsaved changes';
+        }
+
+        function resetChanges() {
+            if (confirm('Are you sure you want to discard all unsaved changes?')) {
+                location.reload();
+            }
+        }
+
+        function saveChanges() {
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmation-modal').classList.add('hidden');
+        }
+
+        async function confirmSave() {
+            closeConfirmationModal();
+            
+            // Simulate save operation
+            const saveBtn = document.querySelector('[onclick="saveChanges()"]');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = `
+                <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+            `;
+            saveBtn.disabled = true;
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            saveBtn.innerHTML = originalText;
+            saveBtn.disabled = false;
+            hideChangesIndicator();
+            
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-success-100 border border-success-200 text-success-600 px-4 py-2 rounded-md shadow-lg z-50';
+            successDiv.textContent = 'Configuration saved successfully!';
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Monitor form changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('change', showChangesIndicator);
+                input.addEventListener('input', showChangesIndicator);
+            });
+        });
+    </script>
+</body>
+</html>

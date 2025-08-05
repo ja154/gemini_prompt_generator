@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Prompt Interface - Gemini Prompt Generator</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fgeminipro6078back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.6"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Global Navigation Header -->
+    <header class="bg-surface border-b border-secondary-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2L26 8V24L16 30L6 24V8L16 2Z" fill="currentColor" opacity="0.1"/>
+                            <path d="M16 2L26 8V24L16 30L6 24V8L16 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="16" cy="16" r="6" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-lg font-semibold text-text-primary">Gemini Prompt Generator</h1>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="ai_prompt_interface.html" class="text-primary font-medium px-3 py-2 rounded-md bg-primary-50">
+                        AI Interface
+                    </a>
+                    <a href="response_history_dashboard.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        History
+                    </a>
+                    <a href="api_configuration_settings.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        Settings
+                    </a>
+                    <a href="system_status_monitor.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                        Status
+                    </a>
+                </nav>
+
+                <!-- User Session Status -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden sm:flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-success rounded-full"></div>
+                        <span class="text-sm text-text-secondary">Connected</span>
+                    </div>
+                    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-medium">U</span>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="text-text-secondary hover:text-text-primary p-2" onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="md:hidden hidden border-t border-secondary-200 bg-surface">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="ai_prompt_interface.html" class="block px-3 py-2 text-primary font-medium bg-primary-50 rounded-md">
+                    AI Interface
+                </a>
+                <a href="response_history_dashboard.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    History
+                </a>
+                <a href="api_configuration_settings.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    Settings
+                </a>
+                <a href="system_status_monitor.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                    Status
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Request History Sidebar -->
+            <aside id="history-sidebar" class="lg:w-80 order-2 lg:order-1">
+                <div class="card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-text-primary">Recent Prompts</h3>
+                        <button onclick="toggleHistorySidebar()" class="lg:hidden text-text-secondary hover:text-text-primary">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <!-- Recent Prompt 1 -->
+                        <div class="p-3 bg-secondary-50 rounded-lg cursor-pointer hover:bg-secondary-100 transition-micro" onclick="loadPrompt('Explain quantum computing in simple terms')">
+                            <p class="text-sm text-text-primary font-medium mb-1">Quantum Computing Explanation</p>
+                            <p class="text-xs text-text-secondary truncate">Explain quantum computing in simple terms...</p>
+                            <span class="text-xs text-text-secondary">2 hours ago</span>
+                        </div>
+                        
+                        <!-- Recent Prompt 2 -->
+                        <div class="p-3 bg-secondary-50 rounded-lg cursor-pointer hover:bg-secondary-100 transition-micro" onclick="loadPrompt('Write a Python function to sort a list')">
+                            <p class="text-sm text-text-primary font-medium mb-1">Python Sorting Function</p>
+                            <p class="text-xs text-text-secondary truncate">Write a Python function to sort a list...</p>
+                            <span class="text-xs text-text-secondary">5 hours ago</span>
+                        </div>
+                        
+                        <!-- Recent Prompt 3 -->
+                        <div class="p-3 bg-secondary-50 rounded-lg cursor-pointer hover:bg-secondary-100 transition-micro" onclick="loadPrompt('Create a marketing strategy for a tech startup')">
+                            <p class="text-sm text-text-primary font-medium mb-1">Marketing Strategy</p>
+                            <p class="text-xs text-text-secondary truncate">Create a marketing strategy for a tech startup...</p>
+                            <span class="text-xs text-text-secondary">1 day ago</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-secondary-200">
+                        <a href="response_history_dashboard.html" class="text-sm text-primary hover:text-primary-700 font-medium">
+                            View All History →
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Prompt Interface -->
+            <div class="flex-1 max-w-4xl mx-auto order-1 lg:order-2">
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-text-primary mb-2">AI Prompt Interface</h1>
+                    <p class="text-text-secondary">Generate AI responses using Google's Gemini API. Enter your prompt below and get intelligent, contextual responses.</p>
+                </div>
+
+                <!-- Prompt Input Section -->
+                <div class="card mb-6">
+                    <div class="mb-4">
+                        <label for="prompt-input" class="block text-sm font-medium text-text-primary mb-2">
+                            Your Prompt
+                        </label>
+                        <div class="relative">
+                            <textarea id="prompt-input" rows="6" class="input-field resize-none" placeholder="Enter your prompt here... For example: 'Explain machine learning concepts for beginners' or 'Write a Python function to calculate fibonacci numbers'" maxlength="2000" oninput="updateCharacterCount()"></textarea>
+                            <div class="absolute bottom-3 right-3 text-xs text-text-secondary">
+                                <span id="char-count">0</span>/2000
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Validation Message -->
+                    <div id="validation-message" class="hidden mb-4 p-3 bg-error-50 border border-error-200 rounded-md">
+                        <p class="text-sm text-error-600">Please enter a prompt with at least 10 characters.</p>
+                    </div>
+
+                    <!-- Settings Panel Toggle -->
+                    <div class="mb-4">
+                        <button onclick="toggleSettingsPanel()" class="flex items-center text-sm text-text-secondary hover:text-text-primary transition-micro">
+                            <svg id="settings-chevron" class="w-4 h-4 mr-2 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            Advanced Settings
+                        </button>
+                    </div>
+
+                    <!-- Collapsible Settings Panel -->
+                    <div id="settings-panel" class="hidden mb-6 p-4 bg-secondary-50 rounded-lg border border-secondary-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="response-length" class="block text-sm font-medium text-text-primary mb-2">
+                                    Response Length
+                                </label>
+                                <select id="response-length" class="input-field">
+                                    <option value="short">Short (1-2 paragraphs)</option>
+                                    <option value="medium" selected>Medium (3-5 paragraphs)</option>
+                                    <option value="long">Long (6+ paragraphs)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="creativity-level" class="block text-sm font-medium text-text-primary mb-2">
+                                    Creativity Level
+                                </label>
+                                <select id="creativity-level" class="input-field">
+                                    <option value="conservative">Conservative</option>
+                                    <option value="balanced" selected>Balanced</option>
+                                    <option value="creative">Creative</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button id="generate-btn" onclick="generateResponse()" class="btn-primary w-full md:w-auto px-8 py-3 text-base font-semibold">
+                        <span id="btn-text">Generate Response</span>
+                        <svg id="loading-spinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Response Display Area -->
+                <div id="response-section" class="hidden">
+                    <div class="card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-text-primary">AI Response</h3>
+                            <div class="flex items-center space-x-2">
+                                <span id="response-timestamp" class="text-sm text-text-secondary"></span>
+                                <button onclick="copyResponse()" class="btn-secondary px-3 py-1 text-sm" title="Copy to clipboard">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="response-content" class="prose max-w-none">
+                            <!-- Response content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div id="error-section" class="hidden">
+                    <div class="card border-error-200 bg-error-50">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-error-500 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-medium text-error-800 mb-1">Request Failed</h3>
+                                <p id="error-message" class="text-sm text-error-600 mb-3"></p>
+                                <button onclick="retryRequest()" class="btn-secondary text-sm">
+                                    Try Again
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rate Limiting Feedback -->
+                <div id="rate-limit-section" class="hidden mt-4">
+                    <div class="card border-warning-200 bg-warning-50">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-warning-500 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                            <div>
+                                <h3 class="text-sm font-medium text-warning-800 mb-1">Rate Limit Reached</h3>
+                                <p class="text-sm text-warning-600">You've reached the request limit. Please wait <span id="cooldown-timer">60</span> seconds before trying again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile History Toggle -->
+                <button onclick="toggleHistorySidebar()" class="lg:hidden fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary-700 transition-micro">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Character count functionality
+        function updateCharacterCount() {
+            const textarea = document.getElementById('prompt-input');
+            const charCount = document.getElementById('char-count');
+            charCount.textContent = textarea.value.length;
+        }
+
+        // Toggle settings panel
+        function toggleSettingsPanel() {
+            const panel = document.getElementById('settings-panel');
+            const chevron = document.getElementById('settings-chevron');
+            
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                chevron.classList.add('rotate-90');
+            } else {
+                panel.classList.add('hidden');
+                chevron.classList.remove('rotate-90');
+            }
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toggle history sidebar on mobile
+        function toggleHistorySidebar() {
+            const sidebar = document.getElementById('history-sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+
+        // Load prompt from history
+        function loadPrompt(promptText) {
+            document.getElementById('prompt-input').value = promptText;
+            updateCharacterCount();
+            // Hide sidebar on mobile after selection
+            if (window.innerWidth < 1024) {
+                toggleHistorySidebar();
+            }
+        }
+
+        // Generate response functionality
+        async function generateResponse() {
+            const promptInput = document.getElementById('prompt-input');
+            const generateBtn = document.getElementById('generate-btn');
+            const btnText = document.getElementById('btn-text');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const validationMessage = document.getElementById('validation-message');
+            const responseSection = document.getElementById('response-section');
+            const errorSection = document.getElementById('error-section');
+            const rateLimitSection = document.getElementById('rate-limit-section');
+
+            // Hide previous messages
+            validationMessage.classList.add('hidden');
+            errorSection.classList.add('hidden');
+            rateLimitSection.classList.add('hidden');
+            responseSection.classList.add('hidden');
+
+            // Validate input
+            if (promptInput.value.trim().length < 10) {
+                validationMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            btnText.textContent = 'Generating...';
+            loadingSpinner.classList.remove('hidden');
+
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulate random success/failure for demo
+                const success = Math.random() > 0.2;
+                
+                if (success) {
+                    // Show response
+                    const responseContent = document.getElementById('response-content');
+                    const responseTimestamp = document.getElementById('response-timestamp');
+                    
+                    responseContent.innerHTML = `
+                        <div class="space-y-4">
+                            <p class="text-text-primary leading-relaxed">
+                                Based on your prompt "${promptInput.value.substring(0, 50)}...", here's a comprehensive response generated by the Gemini AI model.
+                            </p>
+                            <p class="text-text-primary leading-relaxed">
+                                This is a sample response that demonstrates the formatting and structure of AI-generated content. In a real implementation, this would contain the actual response from the Gemini API based on your specific prompt.
+                            </p>
+                            <div class="bg-secondary-50 p-4 rounded-lg border-l-4 border-accent">
+                                <p class="text-text-primary font-medium mb-2">Key Points:</p>
+                                <ul class="list-disc list-inside space-y-1 text-text-secondary">
+                                    <li>Structured response formatting</li>
+                                    <li>Syntax highlighting support</li>
+                                    <li>Copy-to-clipboard functionality</li>
+                                    <li>Timestamp metadata</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    
+                    responseTimestamp.textContent = new Date().toLocaleString();
+                    responseSection.classList.remove('hidden');
+                } else {
+                    // Show error
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = 'Failed to generate response. Please check your connection and try again.';
+                    errorSection.classList.remove('hidden');
+                }
+            } catch (error) {
+                // Show error
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = 'An unexpected error occurred. Please try again later.';
+                errorSection.classList.remove('hidden');
+            } finally {
+                // Reset button state
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = 'Generate Response';
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        // Copy response to clipboard
+        async function copyResponse() {
+            const responseContent = document.getElementById('response-content');
+            const text = responseContent.innerText;
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                // Show success feedback
+                const copyBtn = event.target.closest('button');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = `
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Copied!
+                `;
+                copyBtn.classList.add('bg-success-100', 'text-success-600');
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.classList.remove('bg-success-100', 'text-success-600');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        }
+
+        // Retry request
+        function retryRequest() {
+            generateResponse();
+        }
+
+        // Initialize character count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCharacterCount();
+        });
+    </script>
+</body>
+</html>
