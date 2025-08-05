@@ -179,9 +179,9 @@
                         <div class="card">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-semibold text-text-primary">Endpoint Configuration</h3>
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-2 h-2 bg-success rounded-full"></div>
-                                    <span class="text-sm text-success-600">Connected</span>
+                                <div id="connection-status-container" class="flex items-center space-x-2">
+                                    <div id="connection-indicator" class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                                    <span id="connection-status-text" class="text-sm text-text-secondary">Checking...</span>
                                 </div>
                             </div>
                             
@@ -824,50 +824,52 @@ img-src 'self' data: https:;</textarea>
         document.head.appendChild(script);
 
         function initializeSettings() {
-            // Load saved API key
             loadApiKey();
-            // Check connection status
+            loadTimeoutAndRetrySettings();
             checkConnectionStatus();
         }
 
-        // Load saved API key from localStorage
         function loadApiKey() {
             const savedKey = localStorage.getItem('gemini_api_key');
             if (savedKey && savedKey !== 'your_gemini_api_key') {
                 document.getElementById('api-key').value = savedKey;
-                showChangesIndicator();
             }
         }
 
-        // Save API key to localStorage
-        function saveApiKey() {
+        function loadTimeoutAndRetrySettings() {
+            const timeout = localStorage.getItem('request_timeout');
+            const retries = localStorage.getItem('retry_attempts');
+            const delay = localStorage.getItem('retry_delay');
+
+            if (timeout) document.getElementById('request-timeout').value = timeout;
+            if (retries) document.getElementById('retry-attempts').value = retries;
+            if (delay) document.getElementById('retry-delay').value = delay;
+        }
+
+        function saveSettings() {
+            // Save API Key
             const apiKey = document.getElementById('api-key').value.trim();
-            
             if (!apiKey) {
                 alert('Please enter an API key');
-                return;
+                return false;
             }
-
             if (apiKey.length < 30) {
                 alert('API key appears to be too short. Please check and try again.');
-                return;
+                return false;
             }
-
-            // Save to localStorage and update the API client
             localStorage.setItem('gemini_api_key', apiKey);
             if (window.geminiAPI) {
                 window.geminiAPI.setApiKey(apiKey);
             }
 
-            // Show success message
-            showSuccessMessage('API key saved successfully!');
-            hideChangesIndicator();
-            
-            // Re-check connection
-            setTimeout(checkConnectionStatus, 1000);
+            // Save other settings
+            localStorage.setItem('request_timeout', document.getElementById('request-timeout').value);
+            localStorage.setItem('retry_attempts', document.getElementById('retry-attempts').value);
+            localStorage.setItem('retry_delay', document.getElementById('retry-delay').value);
+
+            return true;
         }
 
-        // Check API connection status
         async function checkConnectionStatus() {
             const indicator = document.getElementById('connection-indicator');
             const status = document.getElementById('connection-status-text');
@@ -875,221 +877,92 @@ img-src 'self' data: https:;</textarea>
             if (!window.geminiAPI) {
                 indicator.className = 'w-2 h-2 bg-error rounded-full';
                 status.textContent = 'Not loaded';
-                status.className = 'text-sm text-error-600';
                 return;
             }
 
             indicator.className = 'w-2 h-2 bg-warning rounded-full animate-pulse';
             status.textContent = 'Checking...';
-            status.className = 'text-sm text-warning-600';
             
-            try {
-                const result = await window.geminiAPI.testConnection();
-                if (result.success) {
-                    indicator.className = 'w-2 h-2 bg-success rounded-full';
-                    status.textContent = 'Connected';
-                    status.className = 'text-sm text-success-600';
-                } else {
-                    indicator.className = 'w-2 h-2 bg-error rounded-full';
-                    status.textContent = 'Connection failed';
-                    status.className = 'text-sm text-error-600';
-                }
-            } catch (error) {
+            const result = await window.geminiAPI.testConnection();
+            if (result.success) {
+                indicator.className = 'w-2 h-2 bg-success rounded-full';
+                status.textContent = 'Connected';
+            } else {
                 indicator.className = 'w-2 h-2 bg-error rounded-full';
-                status.textContent = 'Error';
-                status.className = 'text-sm text-error-600';
-                console.error('Connection check failed:', error);
+                status.textContent = 'Connection Failed';
             }
         }
 
-        // Test Connection
         async function testConnection() {
-            const statusDiv = document.getElementById('connection-test-status');
-            const saveButton = document.querySelector('[onclick="saveApiKey()"]');
-            
-            // Save API key first if it's changed
+            const statusDiv = document.getElementById('connection-status');
             const currentKey = document.getElementById('api-key').value.trim();
-            if (currentKey && currentKey !== localStorage.getItem('gemini_api_key')) {
-                saveApiKey();
-                await new Promise(resolve => setTimeout(resolve, 500));
+            const savedKey = localStorage.getItem('gemini_api_key');
+
+            if (currentKey !== savedKey) {
+                if(confirm("You have an unsaved API key. Do you want to save it before testing?")){
+                    if(!saveSettings()){
+                        return; // Don't proceed if save fails
+                    }
+                } else {
+                     // If user doesn't save, update client for this test only
+                    window.geminiAPI.setApiKey(currentKey);
+                }
             }
 
             statusDiv.classList.remove('hidden');
-            
-            try {
-                if (!window.geminiAPI) {
-                    throw new Error('API client not loaded');
-                }
+            statusDiv.innerHTML = `
+                <div class="w-2 h-2 bg-warning rounded-full animate-pulse"></div>
+                <span class="text-sm text-warning-600">Testing connection...</span>
+            `;
 
-                const result = await window.geminiAPI.testConnection();
-                
-                if (result.success) {
-                    statusDiv.innerHTML = `
-                        <div class="w-2 h-2 bg-success rounded-full"></div>
-                        <span class="text-sm text-success-600">Connection successful!</span>
-                    `;
-                    showSuccessMessage('API connection test successful!');
-                } else {
-                    statusDiv.innerHTML = `
-                        <div class="w-2 h-2 bg-error rounded-full"></div>
-                        <span class="text-sm text-error-600">Connection failed: ${result.message}</span>
-                    `;
-                }
-            } catch (error) {
+            const result = await window.geminiAPI.testConnection();
+
+            if (result.success) {
+                statusDiv.innerHTML = `
+                    <div class="w-2 h-2 bg-success rounded-full"></div>
+                    <span class="text-sm text-success-600">Connection successful!</span>
+                `;
+            } else {
                 statusDiv.innerHTML = `
                     <div class="w-2 h-2 bg-error rounded-full"></div>
-                    <span class="text-sm text-error-600">Test failed: ${error.message}</span>
+                    <span class="text-sm text-error-600" title="${result.message}">Connection failed.</span>
                 `;
             }
-            
-            setTimeout(() => {
-                statusDiv.classList.add('hidden');
-                checkConnectionStatus();
-            }, 4000);
+
+            // Revert to saved key if we didn't save
+            if (currentKey !== localStorage.getItem('gemini_api_key')) {
+                window.geminiAPI.setApiKey(savedKey);
+            }
         }
 
-        // Show success message
         function showSuccessMessage(message) {
             const successDiv = document.createElement('div');
             successDiv.className = 'fixed top-4 right-4 bg-success-100 border border-success-200 text-success-600 px-4 py-2 rounded-md shadow-lg z-50';
             successDiv.textContent = message;
             document.body.appendChild(successDiv);
             
-            setTimeout(() => {
-                if (successDiv.parentNode) {
-                    successDiv.parentNode.removeChild(successDiv);
-                }
-            }, 3000);
+            setTimeout(() => successDiv.remove(), 3000);
         }
 
-        // Tab Management
         function showTab(tabName) {
-            // Hide all tab contents
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.add('hidden'));
-            
-            // Remove active state from all tab buttons
-            const tabButtons = document.querySelectorAll('[id^="tab-"]');
-            tabButtons.forEach(button => {
-                button.classList.remove('text-primary', 'bg-primary-50', 'font-medium');
-                button.classList.add('text-text-secondary', 'hover:text-text-primary', 'hover:bg-secondary-100');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('[id^="tab-"]').forEach(b => {
+                b.classList.remove('text-primary', 'bg-primary-50', 'font-medium');
+                b.classList.add('text-text-secondary');
             });
-            
-            // Show selected tab content
             document.getElementById(`content-${tabName}`).classList.remove('hidden');
-            
-            // Add active state to selected tab button
             const activeButton = document.getElementById(`tab-${tabName}`);
-            activeButton.classList.remove('text-text-secondary', 'hover:text-text-primary', 'hover:bg-secondary-100');
             activeButton.classList.add('text-primary', 'bg-primary-50', 'font-medium');
+            activeButton.classList.remove('text-text-secondary');
         }
 
-        // Mobile Menu Toggle
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        // Mobile Accordion Toggle
-        function toggleAccordion(accordionId) {
-            const accordion = document.getElementById(accordionId);
-            const chevron = document.getElementById(`chevron-${accordionId}`);
-            
-            accordion.classList.toggle('hidden');
-            chevron.classList.toggle('rotate-90');
-        }
-
-        // Password Visibility Toggle
         function togglePasswordVisibility(inputId) {
             const input = document.getElementById(inputId);
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-        }
-
-        // Validate CSP
-        function validateCSP() {
-            alert('CSP policy validation would be implemented here');
-        }
-
-        // Download Report
-        function downloadReport(reportType) {
-            // Simulate download
-            const link = document.createElement('a');
-            link.href = '#';
-            link.download = `${reportType}-report-${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-        }
-
-        // User Management
-        function addUser() {
-            alert('Add user modal would open here');
-        }
-
-        function editUser(email) {
-            alert(`Edit user: ${email}`);
-        }
-
-        function deleteUser(email) {
-            if (confirm(`Are you sure you want to delete user: ${email}?`)) {
-                alert(`User ${email} would be deleted`);
-            }
-        }
-
-        // Configuration Management
-        function exportConfig() {
-            const config = {
-                apiEndpoint: document.getElementById('api-endpoint').value,
-                requestTimeout: document.getElementById('request-timeout').value,
-                retryAttempts: document.getElementById('retry-attempts').value,
-                // ... other config values
-            };
-            
-            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `gemini-config-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function importConfig() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        try {
-                            const config = JSON.parse(e.target.result);
-                            // Apply configuration
-                            if (config.apiEndpoint) document.getElementById('api-endpoint').value = config.apiEndpoint;
-                            if (config.requestTimeout) document.getElementById('request-timeout').value = config.requestTimeout;
-                            // ... apply other config values
-                            
-                            showChangesIndicator();
-                            alert('Configuration imported successfully!');
-                        } catch (error) {
-                            alert('Invalid configuration file');
-                        }
-                    };
-                    reader.readAsText(file);
-                }
-            };
-            input.click();
-        }
-
-        // Changes Management
-        function showChangesIndicator() {
-            document.getElementById('changes-indicator').classList.remove('hidden');
-            document.getElementById('changes-text').textContent = 'You have unsaved changes';
-        }
-
-        function hideChangesIndicator() {
-            document.getElementById('changes-indicator').classList.add('hidden');
-            document.getElementById('changes-text').textContent = 'No unsaved changes';
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
 
         function resetChanges() {
@@ -1108,56 +981,42 @@ img-src 'self' data: https:;</textarea>
 
         async function confirmSave() {
             closeConfirmationModal();
-            
-            // Save API key if changed
-            saveApiKey();
-            
-            // Simulate save operation
-            const saveBtn = document.querySelector('[onclick="saveChanges()"]');
-            if (saveBtn) {
-                const originalText = saveBtn.innerHTML;
-                saveBtn.innerHTML = `
-                    <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Saving...
-                `;
-                saveBtn.disabled = true;
-                
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                saveBtn.innerHTML = originalText;
-                saveBtn.disabled = false;
+            if (saveSettings()) {
+                showSuccessMessage('Configuration saved successfully!');
+                hideChangesIndicator();
+                await checkConnectionStatus();
             }
-            
-            hideChangesIndicator();
-            showSuccessMessage('Configuration saved successfully!');
         }
 
-        // Monitor form changes
+        let hasUnsavedChanges = false;
+        function showChangesIndicator() {
+            if(hasUnsavedChanges) return;
+            hasUnsavedChanges = true;
+            document.getElementById('changes-indicator').classList.remove('hidden');
+            document.getElementById('changes-text').textContent = 'You have unsaved changes';
+        }
+
+        function hideChangesIndicator() {
+            hasUnsavedChanges = false;
+            document.getElementById('changes-indicator').classList.add('hidden');
+            document.getElementById('changes-text').textContent = 'No unsaved changes';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
-                if (input.id !== 'api-key') { // API key has its own save mechanism
-                    input.addEventListener('change', showChangesIndicator);
-                    input.addEventListener('input', showChangesIndicator);
-                }
+                input.addEventListener('input', showChangesIndicator);
             });
-
-            // Special handling for API key changes
-            const apiKeyInput = document.getElementById('api-key');
-            if (apiKeyInput) {
-                apiKeyInput.addEventListener('input', function() {
-                    const currentValue = this.value.trim();
-                    const savedValue = localStorage.getItem('gemini_api_key') || '';
-                    
-                    if (currentValue !== savedValue) {
-                        showChangesIndicator();
-                    }
-                });
-            }
         });
+
+        // Placeholder functions for unimplemented features
+        function validateCSP() { alert('CSP policy validation would be implemented here'); }
+        function downloadReport(type) { alert(`Downloading ${type} report...`); }
+        function addUser() { alert('Add user modal would open here'); }
+        function editUser(email) { alert(`Edit user: ${email}`); }
+        function deleteUser(email) { if(confirm(`Delete ${email}?`)) alert('User deleted.'); }
+        function exportConfig() { alert('Exporting config...'); }
+        function importConfig() { alert('Importing config...'); }
     </script>
 <script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>

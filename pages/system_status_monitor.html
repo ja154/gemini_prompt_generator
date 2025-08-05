@@ -185,34 +185,34 @@
                 </div>
             </div>
 
-            <!-- Success/Error Rates -->
+            <!-- Rate Limit Status -->
             <div class="card">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-text-primary">Success Rate</h3>
-                    <div class="text-2xl font-bold text-success-600">99.2%</div>
+                    <h3 class="text-lg font-semibold text-text-primary">Rate Limit Status</h3>
+                    <div id="rate-limit-status" class="text-2xl font-bold text-success-600">OK</div>
                 </div>
                 <div class="space-y-3">
                     <div>
                         <div class="flex justify-between text-sm mb-1">
-                            <span class="text-text-secondary">Successful Requests</span>
-                            <span class="text-success-600 font-medium">2,847</span>
+                            <span class="text-text-secondary">Requests This Minute</span>
+                            <span id="requests-this-minute" class="text-success-600 font-medium">0 / 10</span>
                         </div>
                         <div class="w-full bg-secondary-200 rounded-full h-2">
-                            <div class="bg-success-500 h-2 rounded-full" style="width: 99.2%"></div>
+                            <div id="requests-this-minute-bar" class="bg-success-500 h-2 rounded-full" style="width: 0%"></div>
                         </div>
                     </div>
                     <div>
                         <div class="flex justify-between text-sm mb-1">
-                            <span class="text-text-secondary">Failed Requests</span>
-                            <span class="text-error-600 font-medium">23</span>
+                            <span class="text-text-secondary">Requests This Hour</span>
+                            <span id="requests-this-hour" class="text-error-600 font-medium">0 / 500</span>
                         </div>
                         <div class="w-full bg-secondary-200 rounded-full h-2">
-                            <div class="bg-error-500 h-2 rounded-full" style="width: 0.8%"></div>
+                            <div id="requests-this-hour-bar" class="bg-success-500 h-2 rounded-full" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
                 <div class="mt-3 text-sm text-text-secondary">
-                    Total requests: <span class="font-medium">2,870</span>
+                    Based on your local usage.
                 </div>
             </div>
 
@@ -645,6 +645,40 @@
                 });
             }, 30000);
         });
+    </script>
+    <script>
+        // Load Gemini API script and then initialize
+        const script = document.createElement('script');
+        script.src = '../public/gemini-api.js';
+        script.onload = function() {
+            updateRateLimitStatus();
+            setInterval(updateRateLimitStatus, 5000); // Refresh every 5 seconds
+        };
+        document.head.appendChild(script);
+
+        function updateRateLimitStatus() {
+            if (!window.geminiAPI) return;
+
+            const stats = window.geminiAPI.getUserStats();
+
+            const minutePercent = (stats.requestsThisMinute / stats.minuteLimit) * 100;
+            const hourPercent = (stats.requestsThisHour / stats.hourlyLimit) * 100;
+
+            document.getElementById('requests-this-minute').textContent = `${stats.requestsThisMinute} / ${stats.minuteLimit}`;
+            document.getElementById('requests-this-minute-bar').style.width = `${minutePercent}%`;
+
+            document.getElementById('requests-this-hour').textContent = `${stats.requestsThisHour} / ${stats.hourlyLimit}`;
+            document.getElementById('requests-this-hour-bar').style.width = `${hourPercent}%`;
+
+            const statusEl = document.getElementById('rate-limit-status');
+            if (minutePercent >= 90 || hourPercent >= 90) {
+                statusEl.textContent = 'High Usage';
+                statusEl.className = 'text-2xl font-bold text-warning-600';
+            } else {
+                statusEl.textContent = 'OK';
+                statusEl.className = 'text-2xl font-bold text-success-600';
+            }
+        }
     </script>
 <script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>
