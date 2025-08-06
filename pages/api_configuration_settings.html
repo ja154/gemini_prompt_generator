@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>API Configuration Settings - Gemini Prompt Generator</title>
-    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fgeminipro6078back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.6"></script>
@@ -30,16 +30,16 @@
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex space-x-8">
-                    <a href="ai_prompt_interface.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                    <a href="/ai_prompt_interface" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
                         AI Interface
                     </a>
-                    <a href="response_history_dashboard.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                    <a href="/response_history_dashboard" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
                         History
                     </a>
-                    <a href="api_configuration_settings.html" class="text-primary font-medium px-3 py-2 rounded-md bg-primary-50">
+                    <a href="/api_configuration_settings" class="text-primary font-medium px-3 py-2 rounded-md bg-primary-50">
                         Settings
                     </a>
-                    <a href="system_status_monitor.html" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
+                    <a href="/system_status_monitor" class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md hover:bg-secondary-100 transition-micro">
                         Status
                     </a>
                 </nav>
@@ -69,16 +69,16 @@
         <!-- Mobile Navigation Menu -->
         <div id="mobile-menu" class="md:hidden hidden border-t border-secondary-200 bg-surface">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="ai_prompt_interface.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                <a href="/ai_prompt_interface" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
                     AI Interface
                 </a>
-                <a href="response_history_dashboard.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                <a href="/response_history_dashboard" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
                     History
                 </a>
-                <a href="api_configuration_settings.html" class="block px-3 py-2 text-primary font-medium bg-primary-50 rounded-md">
+                <a href="/api_configuration_settings" class="block px-3 py-2 text-primary font-medium bg-primary-50 rounded-md">
                     Settings
                 </a>
-                <a href="system_status_monitor.html" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
+                <a href="/system_status_monitor" class="block px-3 py-2 text-text-secondary hover:text-text-primary hover:bg-secondary-100 rounded-md">
                     Status
                 </a>
             </div>
@@ -816,7 +816,7 @@ img-src 'self' data: https:;</textarea>
     <script>
         // Load the Gemini API script
         const script = document.createElement('script');
-        script.src = '../public/gemini-api.js';
+        script.src = '/public/gemini-api.js';
         script.onload = function() {
             // Initialize after script loads
             initializeSettings();
@@ -1018,6 +1018,6 @@ img-src 'self' data: https:;</textarea>
         function exportConfig() { alert('Exporting config...'); }
         function importConfig() { alert('Importing config...'); }
     </script>
-<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+<script id="dhws-dataInjector" src="/public/dhws-data-injector.js"></script>
 </body>
 </html>
