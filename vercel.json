@@ -1,8 +1,9 @@
 {
+  "version": 2,
+  "build": {
+    "command": "npm run build:css"
+  },
   "rewrites": [
-    {
-      "source": "/:path((?!css/|public/|favicon.ico|manifest.json|index.html).*)",
-      "destination": "/pages/:path.html"
-    }
+    { "source": "^/([^/.]+)$", "destination": "/pages/$1.html" }
   ]
 }
