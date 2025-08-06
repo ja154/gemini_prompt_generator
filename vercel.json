@@ -1,8 +1,7 @@
 {
-  "rewrites": [
-    {
-      "source": "/:path((?!css/|public/|favicon.ico|manifest.json|index.html).*)",
-      "destination": "/pages/:path.html"
-    }
-  ]
+  "version": 2,
+  "build": {
+    "command": "npm run build:css"
+  },
+  "cleanUrls": true
 }
