@@ -3,7 +3,5 @@
   "build": {
     "command": "npm run build:css"
   },
-  "rewrites": [
-    { "source": "^/([^/.]+)$", "destination": "/pages/$1.html" }
-  ]
+  "cleanUrls": true
 }
